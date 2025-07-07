@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Ticket;
+use App\Models\TicketComment;
 use App\Services\CommentService;
 
 class CommentController extends Controller
@@ -33,6 +35,9 @@ class CommentController extends Controller
         $comments = $this->commentService->getByTicketId($ticketId);
         return response()->json($comments);
     }
+
+
+
 
     public function update(UpdateCommentRequest $request, $id)
     {

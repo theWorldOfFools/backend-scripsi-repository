@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->foreignId('user_id');
             $table->foreignId('category_id');
             $table->foreignId('assigned_to')->nullable();
-            $table->enum('status', ['baru', 'diproses', 'selesai', 'ditolak'])->default('baru');
+            $table->enum('status', ['baru', 'diproses', 'selesai', 'ditolak','batal'])->default('baru');
             $table->enum('urgensi', ['rendah', 'sedang', 'tinggi'])->default('sedang');
             $table->timestamps();
         });

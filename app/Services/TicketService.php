@@ -1,6 +1,7 @@
 <?php 
 namespace App\Services;
 
+use App\Models\Notification;
 use App\Models\Ticket;
 use App\Models\TicketComment;
 
@@ -27,8 +28,26 @@ public function create(array $data)
         'message' => 'Tiket dibuat dengan status: ' . ($ticket->status ?? 'baru'),
     ]);
 
+
+    // Simpan komentar awal saat tiket dibuat
+    Notification::create([
+        'user_id' => $data['user_id'],
+        'title'=>'Berhasil Buat Ticket ',
+        'message' => 'Tiket dibuat dengan status: ' . ($ticket->status ?? 'baru'),
+        'is_read'=>false
+    ]);
+
     return $ticket;
 }
+
+
+   public function getByUserId($userId)
+    {
+        return Ticket::where('user_id', $userId)
+            ->with(['comments.user', 'attachments', 'category'])
+            ->latest()
+            ->get();
+    }
  public function update($id, array $data)
 {
     $ticket = Ticket::findOrFail($id);

@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
+use App\Models\TicketComment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTicketRequest;
 use App\Services\TicketService;
@@ -30,6 +32,28 @@ class TicketController extends Controller
     {
         return response()->json($this->ticketService->getById($id));
     }
+
+public function myTickets($userId)
+{
+    return response()->json($this->ticketService->getByUserId($userId));
+}
+
+
+    public function cancelTicket($ticketId)
+{
+    $ticket = Ticket::findOrFail($ticketId);
+    $ticket->status = 'batal';
+    $ticket->save();
+
+    // Buat komentar status "batal"
+    TicketComment::create([
+        'ticket_id' => $ticketId,
+        'user_id' => $ticket->user_id,
+        'message' => 'Tiket dibatalkan.',
+    ]);
+
+    return response()->json(['message' => 'Tiket berhasil dibatalkan.']);
+}
 
     public function update(Request $request, $id)
     {

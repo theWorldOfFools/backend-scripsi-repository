@@ -11,22 +11,19 @@ class NotificationController extends Controller
 
     public function __construct(NotificationService $notificationService)
     {
-        $this->middleware('auth:sanctum'); // Auth middleware (ganti sesuai setup JWT)
         $this->notificationService = $notificationService;
     }
 
     // Get all notifications for authenticated user
-    public function index(Request $request)
+    public function index($userId)
     {
-        $userId = $request->user()->id;
         $notifications = $this->notificationService->getAll($userId);
         return response()->json($notifications);
     }
 
     // Get unread notifications
-    public function unread(Request $request)
+    public function unread( $userId)
     {
-        $userId = $request->user()->id;
         $notifications = $this->notificationService->getUnread($userId);
         return response()->json($notifications);
     }
