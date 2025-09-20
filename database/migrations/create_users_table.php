@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('no_telepon');
             $table->enum('role', ['karyawan', 'teknisi', 'admin'])->default('karyawan');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();

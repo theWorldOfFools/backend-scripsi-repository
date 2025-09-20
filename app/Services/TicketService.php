@@ -44,7 +44,7 @@ public function create(array $data)
    public function getByUserId($userId)
     {
         return Ticket::where('user_id', $userId)
-            ->with(['comments.user', 'attachments', 'category'])
+            ->with(['comments.user', 'attachments','assignedUser', 'category'])
             ->latest()
             ->get();
     }
