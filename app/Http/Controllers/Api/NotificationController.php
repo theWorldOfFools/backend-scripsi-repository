@@ -17,12 +17,18 @@ class NotificationController extends Controller
     // Get all notifications for authenticated user
     public function index($userId)
     {
-        $notifications = $this->notificationService->getAll($userId);
+        // $notifications = $this->notificationService->getAll($userId);
+        $notifications = $this->notificationService->getAllPaginated(
+            $userId,
+            10,
+            1,
+        );
+
         return response()->json($notifications);
     }
 
     // Get unread notifications
-    public function unread( $userId)
+    public function unread($userId)
     {
         $notifications = $this->notificationService->getUnread($userId);
         return response()->json($notifications);
@@ -35,6 +41,5 @@ class NotificationController extends Controller
         return response()->json($notification);
     }
 }
-
 
 ?>

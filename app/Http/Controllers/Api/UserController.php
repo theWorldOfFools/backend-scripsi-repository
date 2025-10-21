@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -17,7 +17,9 @@ class UserController extends Controller
 
     public function index()
     {
-        return response()->json($this->userService->getAll());
+        $results = $this->userService->getAllPaginated(10, 1);
+        // return response()->json($this->userService->getAll());
+        return response()->json($results);
     }
 
     public function store(StoreUserRequest $request)
@@ -31,24 +33,23 @@ class UserController extends Controller
         return response()->json($this->userService->getById($id));
     }
 
-public function myDetailProfile($userId)
-{
-    return response()->json($this->userService->getDetailUser($userId));
-}
-
-
+    public function myDetailProfile($userId)
+    {
+        return response()->json($this->userService->getDetailUser($userId));
+    }
 
     public function update(Request $request, $id)
     {
-        return response()->json($this->userService->update($id, $request->all()));
+        return response()->json(
+            $this->userService->update($id, $request->all()),
+        );
     }
 
     public function destroy($id)
     {
         $this->userService->delete($id);
-        return response()->json(['message' => 'Deleted'], 204);
+        return response()->json(["message" => "Deleted"], 204);
     }
 }
-
 
 ?>

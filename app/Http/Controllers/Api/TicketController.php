@@ -1,6 +1,8 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Params;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketComment;
@@ -19,7 +21,9 @@ class TicketController extends Controller
 
     public function index()
     {
-        return response()->json($this->ticketService->getAll());
+        // return response()->json($this->ticketService->getAll());
+        $results = $this->ticketService->getAllPaginated(10, 1);
+        return response()->json($results);
     }
 
     public function store(StoreTicketRequest $request)
@@ -33,39 +37,39 @@ class TicketController extends Controller
         return response()->json($this->ticketService->getById($id));
     }
 
-public function myTickets($userId)
-{
-    return response()->json($this->ticketService->getByUserId($userId));
-}
-
+    public function myTickets($userId)
+    {
+        $results = $this->ticketService->getByUserIdPaginated($userId, 10, 1);
+        return response()->json($results);
+        // return response()->json($this->ticketService->getByUserId($userId));
+    }
 
     public function cancelTicket($ticketId)
-{
-    $ticket = Ticket::findOrFail($ticketId);
-    $ticket->status = 'batal';
-    $ticket->save();
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+        $ticket->status = Params::BATAL_TICKET;
+        $ticket->save();
 
-    // Buat komentar status "batal"
-    TicketComment::create([
-        'ticket_id' => $ticketId,
-        'user_id' => $ticket->user_id,
-        'message' => 'Tiket dibatalkan.',
-    ]);
+        // Buat komentar status "batal"
+        TicketComment::create([
+            "ticket_id" => $ticketId,
+            "user_id" => $ticket->user_id,
+            "message" => "Tiket dibatalkan.",
+        ]);
 
-    return response()->json(['message' => 'Tiket berhasil dibatalkan.']);
-}
+        return response()->json(["message" => "Tiket berhasil dibatalkan."]);
+    }
 
     public function update(Request $request, $id)
     {
-        return response()->json($this->ticketService->update($id, $request->all()));
+        return response()->json(
+            $this->ticketService->update($id, $request->all()),
+        );
     }
 
     public function destroy($id)
     {
         $this->ticketService->delete($id);
-        return response()->json(['message' => 'Deleted'], 204);
+        return response()->json(["message" => "Deleted"], 204);
     }
 }
-
-
-?>
