@@ -1,11 +1,9 @@
-<?php 
+<?php
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
-use App\Models\Ticket;
-use App\Models\TicketComment;
 use App\Services\CommentService;
 
 class CommentController extends Controller
@@ -17,11 +15,13 @@ class CommentController extends Controller
         $this->commentService = $commentService;
     }
 
-
-
     public function index()
     {
-        return response()->json($this->commentService->getAll());
+        $perPage = 10;
+        $page = 1;
+        $result = $this->commentService->getAllPaginated($perPage, $page);
+        // $result = $this->commentService->getAll();
+        return response()->json($result);
     }
 
     public function store(StoreCommentRequest $request)
@@ -30,14 +30,14 @@ class CommentController extends Controller
         return response()->json($comment, 201);
     }
 
-        public function getStatus($ticketId)
+    public function getStatus($ticketId)
     {
-        $comments = $this->commentService->getByTicketId($ticketId);
+        // $comments = $this->commentService->getByTicketId($ticketId);
+
+        $comments = $this->commentService->getByTicketIdPaginated($ticketId);
+
         return response()->json($comments);
     }
-
-
-
 
     public function update(UpdateCommentRequest $request, $id)
     {
@@ -48,9 +48,8 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $this->commentService->delete($id);
-        return response()->json(['message' => 'Comment deleted.'], 204);
+        return response()->json(["message" => "Comment deleted."], 204);
     }
 }
-
 
 ?>
