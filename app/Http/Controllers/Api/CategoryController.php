@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -18,17 +18,24 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return response()->json($this->service->all());
+        $results = $this->service->getAllPaginated(10, 1);
+        return response()->json($results);
+        // return response()->json($this->service->all());
     }
 
     public function store(StoreCategoryRequest $request)
     {
-        return response()->json($this->service->create($request->validated()), 201);
+        return response()->json(
+            $this->service->create($request->validated()),
+            201,
+        );
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        return response()->json($this->service->update($category, $request->validated()));
+        return response()->json(
+            $this->service->update($category, $request->validated()),
+        );
     }
 
     public function destroy(Category $category)
@@ -37,6 +44,5 @@ class CategoryController extends Controller
         return response()->json(null, 204);
     }
 }
-
 
 ?>

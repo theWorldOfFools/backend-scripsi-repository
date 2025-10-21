@@ -3,9 +3,33 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Adapters\EloquentAdapter;
+use PaginationLib\Pagination;
 
 class CategoryService
 {
+    /**
+     * Get All data with pagination
+     * @param perPage (limit)
+     * @param currentPage  ( offset)
+     * @author gojoSatoru
+     */
+    public function getAllPaginated(
+        int $perPage = 10,
+        int $currentPage = 1,
+    ): array {
+        $query = Category::query();
+
+        // Gunakan adapter
+        $adapter = new EloquentAdapter($query);
+
+        // Buat Pagination instance
+        $pagination = new Pagination($adapter, $perPage, $currentPage, "");
+
+        // Kembalikan hasil (data + meta)
+        return $pagination->toArray();
+    }
+
     public function all()
     {
         return Category::all();
@@ -27,5 +51,3 @@ class CategoryService
         return $category->delete();
     }
 }
-
-?>

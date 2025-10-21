@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Adapters\EloquentAdapter;
 use App\Models\TicketComment;
+use App\Adapters\EloquentAdapter;
 use PaginationLib\Pagination;
+
 class CommentService
 {
     public function getAllPaginated(
