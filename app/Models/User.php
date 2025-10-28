@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
-
 {
     use HasFactory;
 
-    
-        public function getJWTIdentifier()
+    public function getJWTIdentifier()
     {
         return $this->getKey();
     }
@@ -21,22 +19,26 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    protected $fillable = ['name', 'email', 'password', 'role', 'status'];
-    protected $hidden = ['password'];
+    protected $fillable = ["name", "email", "password", "role", "status"];
+    protected $hidden = ["password"];
 
-    public function tickets() {
+    public function tickets()
+    {
         return $this->hasMany(Ticket::class);
     }
 
-    public function assignedTickets() {
-        return $this->hasMany(Ticket::class, 'assigned_to');
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, "assigned_to");
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany(TicketComment::class);
     }
 
-    public function notifications() {
+    public function notifications()
+    {
         return $this->hasMany(Notification::class);
     }
 }
