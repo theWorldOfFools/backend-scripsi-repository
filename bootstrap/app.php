@@ -12,7 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: "/up",
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // ✅ Middleware global
         $middleware->prepend(\App\Http\Middleware\Cors::class);
+
+        // ✅ Middleware alias untuk route
+        $middleware->alias([
+            "role" => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
