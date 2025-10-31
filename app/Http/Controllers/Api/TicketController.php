@@ -72,4 +72,15 @@ class TicketController extends Controller
         $this->ticketService->delete($id);
         return response()->json(["message" => "Deleted"], 204);
     }
+
+    /**
+     * Statistik dan Reporting Tiket
+     * @author tsany <ryzen12021@gmail.com>
+     */
+    public function statistics()
+    {
+        $stats = $this->ticketService->getStatistics();
+        // dd($stats);
+        return response()->json($stats);
+    }
 }
