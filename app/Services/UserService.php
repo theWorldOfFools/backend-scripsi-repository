@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Adapters\EloquentAdapter;
+use App\Models\Ticket;
 use App\Models\User;
 use PaginationLib\Pagination;
+use Illuminate\Support\Facades\DB;
 
 class UserService
 {
@@ -63,5 +65,19 @@ class UserService
     {
         $user = User::findOrFail($id);
         $user->delete();
+    }
+
+    public function getTechnicianKpi()
+    {
+        return Ticket::selectRaw(
+            "
+                COALESCE(u.name, 'Unassigned') as technician,
+                COUNT(tickets.id) as total_ticket,
+                SUM(CASE WHEN tickets.status = 'selesai' THEN 1 ELSE 0 END) as completed_ticket
+            ",
+        )
+            ->leftJoin("users as u", "tickets.assigned_to", "=", "u.id")
+            ->groupBy("u.name")
+            ->get();
     }
 }

@@ -50,6 +50,19 @@ class UserController extends Controller
         $this->userService->delete($id);
         return response()->json(["message" => "Deleted"], 204);
     }
+
+    /**
+     * KPI Teknisi
+     */
+    public function kpiTechnician()
+    {
+        $kpi = $this->userService->getTechnicianKpi();
+
+        return response()->json([
+            "status" => "success",
+            "data" => $kpi,
+        ]);
+    }
 }
 
 ?>

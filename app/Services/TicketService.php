@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\TicketComment;
 use App\Adapters\EloquentAdapter;
 use PaginationLib\Pagination;
+use Illuminate\Support\Facades\DB;
 
 class TicketService
 {
@@ -139,6 +140,48 @@ class TicketService
     {
         $ticket = Ticket::findOrFail($id);
         $ticket->delete();
+    }
+
+    public function getStatistics()
+    {
+        try {
+            $totalTickets = Ticket::count();
+
+            $byStatus = Ticket::selectRaw("status, COUNT(*) as total")
+                ->groupBy("status")
+                ->pluck("total", "status");
+
+            $byCategory = Ticket::selectRaw(
+                "c.name as category, COUNT(tickets.id) as total",
+            )
+                ->leftJoin(
+                    "categories as c",
+                    "tickets.category_id",
+                    "=",
+                    "c.id",
+                )
+                ->groupBy("c.name")
+                ->pluck("total", "category");
+
+            $byUrgensi = Ticket::selectRaw("urgensi, COUNT(*) as total")
+                ->groupBy("urgensi")
+                ->pluck("total", "urgensi");
+
+            return [
+                "total_tickets" => $totalTickets,
+                "status_summary" => $byStatus,
+                "category_summary" => $byCategory,
+                "urgency_summary" => $byUrgensi,
+            ];
+        } catch (\Throwable $e) {
+            return response()->json(
+                [
+                    "error" => $e->getMessage(),
+                    "trace" => $e->getTraceAsString(),
+                ],
+                500,
+            );
+        }
     }
 }
 
