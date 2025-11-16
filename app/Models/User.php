@@ -19,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    protected $fillable = ["name", "email", "password", "role", "status"];
+    protected $fillable = ["name", "email", "no_telepon","password", "role", "status"];
     protected $hidden = ["password"];
 
     public function tickets()

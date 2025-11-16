@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -16,9 +17,9 @@ class CategoryController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $results = $this->service->getAllPaginated(10, 1);
+        $results = $this->service->getAllPaginated(10, $request->input('page', 1));
         return response()->json($results);
         // return response()->json($this->service->all());
     }
