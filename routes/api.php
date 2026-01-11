@@ -17,5 +17,7 @@ require __DIR__ . '/api/comment.php';
 require __DIR__ . '/api/attachment.php';
 require __DIR__ . '/api/notification.php';
 require __DIR__ . '/api/category.php';
+require __DIR__ . '/api/departemen.php';
+
 require __DIR__ . '/api/user.php';
 
