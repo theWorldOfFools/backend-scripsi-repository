@@ -41,4 +41,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Notification::class);
     }
+
+    
+    public function divisi()
+    {
+        return $this->hasMany(UserDivisi::class);
+    }
 }
