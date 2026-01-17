@@ -9,7 +9,9 @@ Route::prefix("tickets")->group(function () {
         Route::get("/", [TicketController::class, "index"]);
         Route::get("/statistics", [TicketController::class, "statistics"]);
         Route::delete("/{id}", [TicketController::class, "destroy"]);
-    });
+        Route::put("/updateStatusProgress/{ticketId}", [TicketController::class, "progressTicket"]);
+
+        });
 
     Route::put("/{id}", [TicketController::class, "update"]);
     Route::put("/{ticketId}/cancel", [TicketController::class, "cancelTicket"]);
