@@ -2,17 +2,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
-use App\Services\CategoryService;
+use App\Http\Requests\StoreDepartemenRequest;
+use App\Http\Requests\UpdateDepartemenRequest;
+use App\Models\Departemen;
+use App\Services\DepartemenService;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class DepartemenController extends Controller
 {
     protected $service;
 
-    public function __construct(CategoryService $service)
+    public function __construct(DepartemenService $service)
     {
         $this->service = $service;
     }
@@ -24,24 +24,25 @@ class CategoryController extends Controller
         // return response()->json($this->service->all());
     }
 
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreDepartemenRequest $request)
     {
+        // dd($request);
         return response()->json(
             $this->service->create($request->validated()),
             201,
         );
     }
 
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateDepartemenRequest $request, Departemen $departemen)
     {
         return response()->json(
-            $this->service->update($category, $request->validated()),
+            $this->service->update($departemen, $request->validated()),
         );
     }
 
-    public function destroy(Category $category)
+    public function destroy(Departemen $departemen)
     {
-        $this->service->delete($category);
+        $this->service->delete($departemen);
         return response()->json(null, 204);
     }
 }

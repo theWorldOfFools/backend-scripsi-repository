@@ -19,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    protected $fillable = ["name", "email", "password",  "no_telepon","role", "status"];
+    protected $fillable = ["name", "email", "no_telepon","password", "role", "status"];
     protected $hidden = ["password"];
 
     public function tickets()
@@ -40,5 +40,11 @@ class User extends Authenticatable implements JWTSubject
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    
+    public function divisi()
+    {
+        return $this->hasMany(UserDivisi::class);
     }
 }
