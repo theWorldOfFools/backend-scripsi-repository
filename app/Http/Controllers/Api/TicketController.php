@@ -60,6 +60,27 @@ class TicketController extends Controller
         return response()->json(["message" => "Tiket berhasil dibatalkan."]);
     }
 
+
+    /**
+     * @author tsany
+     * Fungsi Untuk progress
+     */
+        public function progressTicket($ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+        $ticket->status = Params::DIPROSES_TICKET;
+        $ticket->save();
+
+        // Buat komentar status "batal"
+        TicketComment::create([
+            "ticket_id" => $ticketId,
+            "user_id" => $ticket->user_id,
+            "message" => "Tiket Berubah menjadi Proses.",
+        ]);
+
+        return response()->json(["message" => "Status Tiket Berubah menjadi Proses."]);
+    }
+
     public function update(Request $request, $id)
     {
         return response()->json(

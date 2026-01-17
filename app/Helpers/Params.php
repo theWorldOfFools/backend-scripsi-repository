@@ -14,6 +14,7 @@ class Params
 
     // ===  HARDCODE UNTUK TRANSACTIONAL ===
     public const BATAL_TICKET = "batal";
+    public const DIPROSES_TICKET = "diproses";
 
     // === Contoh Nilai Statik Bisa diubah Dinamis ===
     public static string $defaultTimezone = "Asia/Jakarta";
