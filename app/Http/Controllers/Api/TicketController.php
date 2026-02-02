@@ -44,6 +44,14 @@ class TicketController extends Controller
         // return response()->json($this->ticketService->getByUserId($userId));
     }
 
+
+    public function Assignme($userId)
+    {
+        $results = $this->ticketService->getByUserAssigneIdPaginated($userId, 10, 1);
+        return response()->json($results);
+        // return response()->json($this->ticketService->getByUserId($userId));
+    }
+
     public function cancelTicket($ticketId)
     {
         $ticket = Ticket::findOrFail($ticketId);
