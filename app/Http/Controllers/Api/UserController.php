@@ -33,6 +33,13 @@ class UserController extends Controller
         return response()->json($this->userService->getById($id));
     }
 
+
+    public function getUserDataByDepartemen($departemen_id)
+    {
+//        var_dump($departemen_id);die;
+        return response()->json($this->userService->getDataByDepartemen($departemen_id));
+    }
+
     public function myDetailProfile($userId)
     {
         return response()->json($this->userService->getDetailUser($userId));

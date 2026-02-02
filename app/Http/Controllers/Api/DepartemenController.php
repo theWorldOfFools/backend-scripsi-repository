@@ -17,6 +17,12 @@ class DepartemenController extends Controller
         $this->service = $service;
     }
 
+    public function indexIT(Request $request)
+    {
+        $results = $this->service->getAllDataIT();
+        return response()->json($results);
+        // return response()->json($this->service->all());
+    }
     public function index(Request $request)
     {
         $results = $this->service->getAllPaginated(10, $request->input('page', 1));

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Adapters\EloquentAdapter;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\UserDivisi;
 use PaginationLib\Pagination;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +42,19 @@ class UserService
     {
         return User::findOrFail($id);
     }
+
+    public function getDataByDepartemen($departemen_id)
+    {
+        return UserDivisi::with([
+            'user' => function($query) {
+                $query->select('id','no_telepon', 'name', 'role');  // kolom yang kamu butuhkan dari user
+            },
+            'departemen' => function($query) {
+                $query->select('id','name'); // kolom yang kamu butuhkan dari departemen
+            }
+        ])->where('departemen_id',$departemen_id)->get();
+    }
+
 
     public function create(array $data)
     {

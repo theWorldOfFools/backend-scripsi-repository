@@ -9,6 +9,24 @@ use PaginationLib\Pagination;
 
 class DepartemenService
 {
+
+    /**
+     * Get All data IT
+     * @author gojoSatoru
+     */
+    public function getAllDataIT(
+    ): array {
+        $query = Departemen::query()->whereIn('id',[4,6]);
+
+        // Gunakan adapter
+        $adapter = new EloquentAdapter($query);
+
+        // Buat Pagination instance
+        $pagination = new Pagination($adapter, 10, 1, "");
+
+        // Kembalikan hasil (data + meta)
+        return $pagination->toArray();
+    }
     /**
      * Get All data with pagination
      * @param perPage (limit)

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DepartemenController;
 
 Route::prefix("departemen")->group(function () {
 
+    Route::get("/departemenIT", [DepartemenController::class, "indexIT"]);
     Route::middleware(["role:admin"])->group(function () {
         Route::get("/", [DepartemenController::class, "index"]);
         Route::post("/", [DepartemenController::class, "store"]);
