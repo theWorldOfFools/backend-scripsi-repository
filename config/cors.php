@@ -1,7 +1,10 @@
 <?php
 
 return [
-    "paths" => ["api/*", "sanctum/csrf-cookie"],
+    // Productions
+    // "paths" => ["api/*", "sanctum/csrf-cookie"],
+    // Development
+    "paths"=>['*'],
     "allowed_methods" => ["*"],
     "allowed_origins" => ["*"], // atau ['http://localhost:3000','http://192.168.1.100:3000']
     "allowed_origins_patterns" => [],
