@@ -87,8 +87,10 @@ class TicketService
         int $currentPage = 1,
     ): array {
         $query = Ticket::where("assigned_to", $userId)
+            ->where("status", "!=", "selesai")
             ->with(["comments.user", "attachments", "assignedUser", "category"])
             ->latest();
+
 
         $adapter = new EloquentAdapter($query);
 
@@ -125,6 +127,35 @@ class TicketService
         int $currentPage = 1,
     ): array {
         $query = Ticket::where("user_id", $userId)
+            ->with(["comments.user", "attachments", "assignedUser", "category"])
+            ->latest();
+
+        $adapter = new EloquentAdapter($query);
+
+        $pagination = new Pagination(
+            $adapter,
+            $perPage,
+            $currentPage,
+            // route("tickets.comments", ["ticket" => $ticketId]), -- no routing because this is for json response
+            "",
+        );
+
+        return $pagination->toArray();
+    }
+
+
+    /**
+     * @param {userId} int (login_id)
+     * @param {perPage} int (limit )
+     * @param {currentPage} int (offset )
+     * @author gojoSatoru
+     */
+    public function getByUserIdTLDonePaginated(
+        int $userId,
+        int $perPage = 10,
+        int $currentPage = 1,
+    ): array {
+        $query = Ticket::where("assigned_to", $userId)
             ->with(["comments.user", "attachments", "assignedUser", "category"])
             ->latest();
 

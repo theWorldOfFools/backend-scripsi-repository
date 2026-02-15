@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Params;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RedirectTicketTaskQuest;
 use App\Models\Ticket;
 use App\Models\TicketComment;
 use Illuminate\Http\Request;
@@ -44,6 +45,12 @@ class TicketController extends Controller
         // return response()->json($this->ticketService->getByUserId($userId));
     }
 
+    public function myTicketsTLDone($userId)
+    {
+        $results = $this->ticketService->getByUserIdTLDonePaginated($userId, 10, 1);
+        return response()->json($results);
+        // return response()->json($this->ticketService->getByUserId($userId));
+    }
 
     public function Assignme($userId)
     {
@@ -87,6 +94,23 @@ class TicketController extends Controller
         ]);
 
         return response()->json(["message" => "Status Tiket Berubah menjadi Proses."]);
+    }
+
+     /**
+     * @author tsany
+     * Fungsi Untuk Dialihkan
+     */
+   public function dialihkanTicket(RedirectTicketTaskQuest $request)
+    {
+        $validated = $request->validated();
+
+        $ticket = Ticket::findOrFail($validated['ticket_id']);
+
+        $ticket->dialihkan($validated['assigned_to'] ?? null);
+
+        return response()->json([
+            "message" => "Status tiket berhasil diubah menjadi Dialihkan."
+        ],200);
     }
 
     public function update(Request $request, $id)

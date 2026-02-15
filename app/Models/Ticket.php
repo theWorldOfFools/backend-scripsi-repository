@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Helpers\Params;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Ticket extends Model
 {
@@ -32,4 +34,24 @@ class Ticket extends Model
     public function attachments() {
         return $this->hasMany(TicketAttachment::class);
     }
+
+    public function dialihkan(?int $assignedTo = null): void
+{
+         DB::transaction(function () use ($assignedTo) {
+
+        $this->status = Params::DIALIHKAN;
+
+        if ($assignedTo) {
+            $this->assigned_to = $assignedTo;
+        }
+
+        $this->save();
+
+        TicketComment::create([
+            'ticket_id' => $this->id,
+            'user_id'   => $assignedTo,
+            'message'   => 'Tiket dialihkan ke pengguna lain.',
+        ]);
+    });
+}
 }
