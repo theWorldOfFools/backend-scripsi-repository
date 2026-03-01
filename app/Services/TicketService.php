@@ -156,6 +156,7 @@ class TicketService
         int $currentPage = 1,
     ): array {
         $query = Ticket::where("assigned_to", $userId)
+            ->where("status", "=", "selesai")
             ->with(["comments.user", "attachments", "assignedUser", "category"])
             ->latest();
 
@@ -240,6 +241,56 @@ class TicketService
             );
         }
     }
+
+    public function getTechnicianStatistics(int $userId)
+    {
+        try {
+
+            $baseQuery = Ticket::where("assigned_to", $userId);
+
+            $total = (clone $baseQuery)->count();
+
+            $baru = (clone $baseQuery)
+                ->where("status", "baru")
+                ->count();
+
+            $diproses = (clone $baseQuery)
+                ->where("status", "diproses")
+                ->count();
+
+            $selesai = (clone $baseQuery)
+                ->where("status", "selesai")
+                ->count();
+
+            $urgent = (clone $baseQuery)
+                ->where("urgensi", "tinggi")
+                ->where("status", "!=", "selesai")
+                ->count();
+
+            $selesaiBulanIni = (clone $baseQuery)
+                ->where("status", "selesai")
+                ->whereMonth("updated_at", now()->month)
+                ->whereYear("updated_at", now()->year)
+                ->count();
+
+            return [
+                "total_ticket" => $total,
+                "status_summary" => [
+                    "baru" => $baru,
+                    "diproses" => $diproses,
+                    "selesai" => $selesai,
+                ],
+                "urgent_ticket" => $urgent,
+                "selesai_bulan_ini" => $selesaiBulanIni,
+            ];
+
+        } catch (\Throwable $e) {
+            return [
+                "error" => $e->getMessage()
+            ];
+        }
+    }
+
 }
 
 ?>
