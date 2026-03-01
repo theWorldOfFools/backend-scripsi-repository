@@ -136,4 +136,15 @@ class TicketController extends Controller
         // dd($stats);
         return response()->json($stats);
     }
+
+
+    /**
+     * Statistik dan Reporting Tiket Teknisi Dashboard
+     *@author  Tsany
+     */
+    public function statistikTeknisi($userId)
+    {
+        $results = $this->ticketService->getTechnicianStatistics($userId);
+        return response()->json($results);
+    }
 }

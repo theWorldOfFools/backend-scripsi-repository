@@ -17,8 +17,8 @@ Route::prefix("tickets")->group(function () {
      * @author tsany
      * Segmen Role Teknisi
      */
+    Route::get("/statistik_teknisi/{userId}", [TicketController::class, "statistikTeknisi"]);
     Route::middleware(['role:teknisi'])->group(function(){
-
     Route::post("/dialihkanTiket", [TicketController::class, "dialihkanTicket"]);
     });
     Route::put("/{id}", [TicketController::class, "update"]);
