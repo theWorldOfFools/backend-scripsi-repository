@@ -1,0 +1,15 @@
+<?php
+
+return [
+    // Productions
+    // "paths" => ["api/*", "sanctum/csrf-cookie"],
+    // Development
+    "paths"=>['*'],
+    "allowed_methods" => ["*"],
+    "allowed_origins" => ["*"], // atau ['http://localhost:3000','http://192.168.1.100:3000']
+    "allowed_origins_patterns" => [],
+    "allowed_headers" => ["*"],
+    "exposed_headers" => [],
+    "max_age" => 0,
+    "supports_credentials" => false,
+];
