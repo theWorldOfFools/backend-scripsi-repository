@@ -12,6 +12,7 @@ Route::prefix('notifications')->group(function () {
         Route::get('/unread/{userId}', [NotificationController::class, 'unread']);
         Route::get('/mark-read/{id}', [NotificationController::class, 'markAsRead']);
 
+        
         Route::get('/telegram/connect', [TelegramController::class, 'generateTelegramToken']);
     });
 

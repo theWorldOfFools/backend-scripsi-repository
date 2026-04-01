@@ -11,7 +11,7 @@ Route::prefix("users")->group(function () {
         Route::put("/{id}", [UserController::class, "update"]);
         Route::delete("/{id}", [UserController::class, "destroy"]);
         Route::get("/{id}", [UserController::class, "show"]);
-        Route::get("/", [UserController::class, "index"]);
         Route::get("/kpi", [UserController::class, "kpiTechnician"]);
-    });
+        });
+        Route::get("/", [UserController::class, "index"]);
 });

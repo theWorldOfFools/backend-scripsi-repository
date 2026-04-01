@@ -7,8 +7,8 @@ Route::prefix("tickets")->group(function () {
     Route::post("/", [TicketController::class, "store"]);
     Route::get("/", [TicketController::class, "index"]);
     Route::put("/updateStatusProgress/{ticketId}", [TicketController::class, "progressTicket"]);
+    Route::get("/statistics", [TicketController::class, "statistics"]);
     Route::middleware(["role:admin"])->group(function () {
-        Route::get("/statistics", [TicketController::class, "statistics"]);
         Route::delete("/{id}", [TicketController::class, "destroy"]);
     });
 
