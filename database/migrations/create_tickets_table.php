@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('subject');
+            $table->string('number_ticket', 255)->unique();
             $table->text('description');
             $table->foreignId('user_id');
             $table->foreignId('category_id');

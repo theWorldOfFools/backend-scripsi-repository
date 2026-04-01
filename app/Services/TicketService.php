@@ -8,9 +8,23 @@ use App\Adapters\EloquentAdapter;
 use App\Models\User;
 use PaginationLib\Pagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TicketService
 {
+
+    /**
+     * Generate nomor tiket unik.
+     */
+    public static function generateTicketNumber(): string
+    {
+        do {
+            // Contoh format: TKT-YYYYMMDD-6CHAR
+            $number = 'TKT-' . date('Ymd') . '-' . strtoupper(Str::random(6));
+        } while (Ticket::where('number_ticket', $number)->exists());
+
+        return $number;
+    }
     /**
      * Get All data with pagination
      * @param perPage (limit)
@@ -54,6 +68,9 @@ class TicketService
 
     public function create(array $data)
     {
+
+     // 🔥 generate nomor tiket unik
+        $data['number_ticket'] = self::generateTicketNumber();
         $ticket = Ticket::create($data);
 
         // Simpan komentar awal saat tiket dibuat
@@ -61,13 +78,13 @@ class TicketService
             "ticket_id" => $ticket->id,
             "user_id" => $data["user_id"],
             "message" =>
-                "Tiket dibuat dengan status: " . ($ticket->status ?? "baru"),
+                "Nomer Tiket ".$ticket->number_ticket." dibuat dengan status: " . ($ticket->status ?? "baru"),
         ]);
 
         // Simpan komentar awal saat tiket dibuat
         Notification::create([
             "user_id" => $data["user_id"],
-            "title" => "Berhasil Buat Ticket ",
+            "title" => "Tiket dengan Nomer ".$ticket->number_ticket." Berhasil Dibuat",
             "message" =>
                 "Tiket dibuat dengan status: " . ($ticket->status ?? "baru"),
             "is_read" => false,
@@ -83,7 +100,7 @@ class TicketService
 
                 TelegramService::send(
                     $userKepada->telegram_chat_id,
-                    "📌 Tiket Berhasil Dibuat\n\n" .
+                    "📌 Tiket dengan Nomer ".$ticket->number_ticket." Berhasil Dibuat\n\n" .
                     "Dibuat Oleh : {$userDibuat->name}\n" .
                     "Urgensi: {$ticket->urgensi}\n" .
                     "Ditujukan kepada: {$userKepada->name}"
@@ -91,7 +108,7 @@ class TicketService
 
                  TelegramService::send(
                     $userDibuat->telegram_chat_id,
-                    "📌 Tiket Berhasil Dibuat\n\n" .
+                    "📌 Tiket dengan Nomer ".$ticket->number_ticket." Berhasil Dibuat\n\n" .
                     "Dibuat Oleh : {$userDibuat->name}\n" .
                     "Urgensi: {$ticket->urgensi}\n" .
                     "Ditujukan kepada: {$userKepada->name}"
@@ -213,7 +230,7 @@ class TicketService
                 "ticket_id" => $ticket->id,
                 "user_id" => $userId,
                 "message" =>
-                    "Tiket diperbarui. Status saat ini: " .
+                    "Tiket dengan Nomer ".$ticket->number_ticket." diperbarui. Status saat ini: " .
                     ($ticket->status ?? "-"),
             ]);
         }
@@ -228,7 +245,7 @@ class TicketService
 
                 TelegramService::send(
                     $userKepada->telegram_chat_id,
-                    "📌 Tiket Berhasil Diperbarui\n\n" .
+                    "📌 Tiket dengan Nomer ".$ticket->number_ticket." Berhasil Diperbarui\n\n" .
                     "Dibuat Oleh : {$userDibuat->name}\n" .
                     "Urgensi: {$ticket->urgensi}\n" .
                     "Ditujukan kepada: {$userKepada->name}"
@@ -236,7 +253,7 @@ class TicketService
 
                  TelegramService::send(
                     $userDibuat->telegram_chat_id,
-                    "📌 Tiket Berhasil Diperbarui\n\n" .
+                    "📌 Tiket dengan Nomer ".$ticket->number_ticket." Berhasil Diperbarui\n\n" .
                     "Dibuat Oleh : {$userDibuat->name}\n" .
                     "Urgensi: {$ticket->urgensi}\n" .
                     "Ditujukan kepada: {$userKepada->name}"
