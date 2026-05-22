@@ -26,6 +26,8 @@ Route::prefix("tickets")->group(function () {
     Route::get("/my-tickets/{userId}", [TicketController::class, "myTickets"]);
     Route::get("/my-tickets-tl-done/{userId}", [TicketController::class, "myTicketsTLDone"]);
     Route::get("/track-assigne-me/{userId}", [TicketController::class, "Assignme"]);
+    Route::get("/track-assigne-me-all/{userId}", [TicketController::class, "AssignmeAll"]);
+
     //fixing bug route
     Route::get("/{id}", [TicketController::class, "show"]);
 });
