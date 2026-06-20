@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TicketController;
-
+use App\Http\Controllers\Api\TicketTransferRequestController;
+use App\Http\Controllers\Api\LeaderboardController;
 Route::prefix("tickets")->group(function () {
     Route::post("/", [TicketController::class, "store"]);
     Route::get("/", [TicketController::class, "index"]);
@@ -11,7 +12,6 @@ Route::prefix("tickets")->group(function () {
     Route::middleware(["role:admin"])->group(function () {
         Route::delete("/{id}", [TicketController::class, "destroy"]);
     });
-
 
     /**
      * @author tsany
@@ -30,4 +30,46 @@ Route::prefix("tickets")->group(function () {
 
     //fixing bug route
     Route::get("/{id}", [TicketController::class, "show"]);
+});
+
+Route::prefix("ticket-transfer")->group(function () {
+    Route::get(
+        '/leaderboard',
+        [LeaderboardController::class,'index']
+    );
+    Route::get(
+    '/point-history/{userId}',
+    [LeaderboardController::class,'pointHistory']
+);
+    // =========================
+    // Pengajuan Pengalihan
+    // =========================
+    Route::post('/create/{ticketId}', [
+        TicketTransferRequestController::class,
+        'store'
+    ]);
+
+    // =========================
+    // List Pengajuan
+    // =========================
+    Route::get('/list', [
+        TicketTransferRequestController::class,
+        'index'
+    ]);
+
+    // =========================
+    // Approve Pengalihan
+    // =========================
+    Route::post('/approve/{id}', [
+        TicketTransferRequestController::class,
+        'approve'
+    ]);
+
+    // =========================
+    // Reject Pengalihan
+    // =========================
+    Route::post('/reject/{id}', [
+        TicketTransferRequestController::class,
+        'reject'
+    ]);
 });

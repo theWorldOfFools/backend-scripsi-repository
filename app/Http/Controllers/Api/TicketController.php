@@ -10,6 +10,7 @@ use App\Models\TicketComment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\User;
+use App\Services\PointService;
 use App\Services\TelegramService;
 use App\Services\TicketService;
 
@@ -161,7 +162,13 @@ class TicketController extends Controller
                     "dialikan ke Teknisi berikut yang mengerjakan : {$userKepada->name}"
                 );
             }
-
+                    PointService::addPoint(
+                        $petugasLama->id,
+                        -2,
+                        'transfer_request',
+                        $ticket->id,
+                        'Mengajukan pengalihan teknisi'
+                    );
         return response()->json([
             "message" => "Status tiket berhasil diubah menjadi Dialihkan."
         ],200);
@@ -169,6 +176,15 @@ class TicketController extends Controller
 
     public function update(Request $request, $id)
     {
+           $ticket = Ticket::findOrFail($id);
+           
+            PointService::addPoint(
+                        $ticket->assigned_to,
+                        10,
+                        'transfer_request',
+                        $ticket->id,
+                        'Selesai Tindak Lanjut'
+                    );
         return response()->json(
             $this->ticketService->update($id, $request->all()),
         );
