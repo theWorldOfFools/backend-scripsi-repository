@@ -65,12 +65,17 @@ class TicketController extends Controller
     }
 
     
-    public function AssignmeAll($userId)
-    {
-        $results = $this->ticketService->getByUserAssigneIdPaginatedAll($userId, 10, 1);
-        return response()->json($results);
-        // return response()->json($this->ticketService->getByUserId($userId));
-    }
+public function AssignmeAll(Request $request)
+{
+    // Mengambil page dan per_page dinamis dari front-end (?page=X&per_page=Y)
+    $page = (int) $request->query('page', 1);
+    $perPage = (int) $request->query('per_page', 10);
+
+    // Panggil service tanpa melewatkan $userId
+    $results = $this->ticketService->getAllTicketsPaginated($perPage, $page);
+    
+    return response()->json($results);
+}
 
     public function cancelTicket($ticketId)
     {
