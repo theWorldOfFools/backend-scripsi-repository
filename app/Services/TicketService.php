@@ -149,35 +149,29 @@ class TicketService
         return $pagination->toArray();
     }
 
-      /**
-     * @param {userId} int (login_id)
-     * @param {perPage} int (limit )
-     * @param {currentPage} int (offset )
-     * @author gojoSatoru
-     */
-    public function getByUserAssigneIdPaginatedAll(
-        int $userId,
-        int $perPage = 10,
-        int $currentPage = 1,
-    ): array {
-        $query = Ticket::where("assigned_to", $userId)
-            ->with(["comments.user", "attachments", "assignedUser", "category"])
-            ->latest();
+/**
+ * Mengambil semua data tiket untuk laporan riwayat penanganan (global)
+ * * @param int $perPage
+ * @param int $currentPage
+ * @return array
+ */
+public function getAllTicketsPaginated(int $perPage = 10, int $currentPage = 1): array 
+{
+    // Query global: mengambil semua data tanpa filter assigned_to
+    $query = Ticket::with(["comments.user", "attachments", "assignedUser", "category"])
+        ->latest();
 
+    $adapter = new EloquentAdapter($query);
 
-        $adapter = new EloquentAdapter($query);
+    $pagination = new Pagination(
+        $adapter,
+        $perPage,
+        $currentPage,
+        "", // no routing because this is for json response
+    );
 
-        $pagination = new Pagination(
-            $adapter,
-            $perPage,
-            $currentPage,
-            // route("tickets.comments", ["ticket" => $ticketId]), -- no routing because this is for json response
-            "",
-        );
-
-        return $pagination->toArray();
-    }
-
+    return $pagination->toArray();
+}
 
 
 
